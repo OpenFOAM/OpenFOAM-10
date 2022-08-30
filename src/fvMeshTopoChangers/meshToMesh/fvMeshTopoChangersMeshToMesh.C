@@ -151,7 +151,7 @@ bool Foam::fvMeshTopoChangers::meshToMesh::update()
                 IOobject::MUST_READ
             ),
             false,
-            false
+            fvMesh::stitchType::none
         );
 
         autoPtr<Foam::meshToMesh> mapper;
@@ -202,6 +202,8 @@ bool Foam::fvMeshTopoChangers::meshToMesh::update()
         }
 
         mesh().reset(newMesh);
+
+        mesh().deltaCoeffs();
 
         // Map all the volFields in the objectRegistry
         #define mapVolFieldType(Type, nullArg)                                 \
