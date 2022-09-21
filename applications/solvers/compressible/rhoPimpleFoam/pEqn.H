@@ -56,8 +56,9 @@ if (pimple.transonic())
         (fvc::interpolate(psi)/fvc::interpolate(rho))*phiHbyA
     );
 
-    const fvScalarMatrix divPhidp(fvm::div(phid, p));
-    phiHbyA -= divPhidp.flux();
+    // Subtract the compressible part
+    // The resulting flux will be zero for a perfect gas
+    phiHbyA -= fvc::interpolate(psi*p)*phiHbyA/fvc::interpolate(rho);
 
     if (pimple.consistent())
     {
@@ -68,7 +69,7 @@ if (pimple.transonic())
     fvScalarMatrix pDDtEqn
     (
         fvc::ddt(rho) + psi*correction(fvm::ddt(p))
-      + fvc::div(phiHbyA) + divPhidp
+      + fvc::div(phiHbyA) + fvm::div(phid, p)
      ==
         fvModels.source(psi, p, rho.name())
     );
