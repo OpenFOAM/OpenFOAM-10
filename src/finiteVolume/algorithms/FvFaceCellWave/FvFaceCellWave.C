@@ -740,7 +740,7 @@ Foam::FvFaceCellWave<Type, TrackingData>::FvFaceCellWave
     ),
     patchFaceChanged_
     (
-        sizesListList<List<PackedBoolList>>
+        sizesListList<List<PackedBoolList>, bool>
         (
             listListSizes(mesh_.boundary()),
             false
