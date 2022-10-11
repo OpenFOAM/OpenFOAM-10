@@ -1309,7 +1309,7 @@ void Foam::fvMesh::distribute(const polyDistributionMap& map)
 }
 
 
-void Foam::fvMesh::conform()
+void Foam::fvMesh::conform(const surfaceScalarField& phi)
 {
     // Clear the geometry fields
     clearGeomNotOldVol();
@@ -1319,6 +1319,15 @@ void Foam::fvMesh::conform()
 
     // Clear any non-updateable addressing
     clearAddressing(true);
+
+    // Modify the mesh fluxes, if necessary
+    if (notNull(phi) && phiPtr_)
+    {
+        for (label i = 0; i <= phi.nOldTimes(); ++ i)
+        {
+            phiRef().oldTime(i) = phi.oldTime(i);
+        }
+    }
 }
 
 
@@ -1415,7 +1424,10 @@ void Foam::fvMesh::unconform
     // Modify the mesh fluxes, if necessary
     if (notNull(phi) && phiPtr_)
     {
-        phiRef() == phi;
+        for (label i = 0; i <= phi.nOldTimes(); ++ i)
+        {
+            phiRef().oldTime(i) = phi.oldTime(i);
+        }
     }
 }
 
