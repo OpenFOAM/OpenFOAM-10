@@ -212,6 +212,21 @@ Foam::fvFieldReconstructor::reconstructFvVolumeField
                     );
                 }
 
+                if (patchFields[completePatchi].overridesConstraint())
+                {
+                    FatalErrorInFunction
+                        << "\nThe field \"" << procFields[0].name()
+                        << "\" on cyclic patch \""
+                        << patchFields[completePatchi].patch().name()
+                        << "\" cannot be reconstructed as it is not a cyclic "
+                        << "patch field. A \"patchType cyclic;\" setting has "
+                        << "been used to override the cyclic patch type.\n\n"
+                        << "Cyclic patches like this with non-cyclic boundary "
+                        << "conditions should be confined to a single "
+                        << "processor using decomposition constraints."
+                        << exit(FatalError);
+                }
+
                 patchFields[completePatchi].rmap
                 (
                     procField.boundaryField()[procPatchi],

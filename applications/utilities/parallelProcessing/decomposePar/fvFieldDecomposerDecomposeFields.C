@@ -153,6 +153,21 @@ Foam::fvFieldDecomposer::decomposeField
         }
         else if (isA<processorCyclicFvPatch>(procPatch))
         {
+            if (field.boundaryField()[completePatchi].overridesConstraint())
+            {
+                FatalErrorInFunction
+                    << "\nThe field \"" << field.name()
+                    << "\" on cyclic patch \""
+                    << field.boundaryField()[completePatchi].patch().name()
+                    << "\" cannot be decomposed as it is not a cyclic "
+                    << "patch field. A \"patchType cyclic;\" setting has "
+                    << "been used to override the cyclic patch type.\n\n"
+                    << "Cyclic patches like this with non-cyclic boundary "
+                    << "conditions should be confined to a single "
+                    << "processor using decomposition constraints."
+                    << exit(FatalError);
+            }
+
             const label nbrCompletePatchi =
                 refCast<const processorCyclicFvPatch>(procPatch)
                .referPatch().nbrPatchID();
