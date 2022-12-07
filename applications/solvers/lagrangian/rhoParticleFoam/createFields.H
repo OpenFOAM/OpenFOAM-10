@@ -50,4 +50,4 @@ autoPtr<compressible::momentumTransportModel> turbulence
 );
 
 Info<< "Constructing clouds" << endl;
-parcelCloudList clouds(rho, U, thermo.mu(), g);
+parcelCloudList clouds(rho, U, g, thermo);
