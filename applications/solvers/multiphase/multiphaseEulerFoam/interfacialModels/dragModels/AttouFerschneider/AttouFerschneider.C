@@ -58,7 +58,7 @@ Foam::dragModels::AttouFerschneider::KGasLiquid
     const volScalarField magURel(mag(gas.U() - liquid.U()));
 
     return
-        E2_*gas.thermo().mu()*sqr(oneMinusGas/solid.d())*sqr(cbrtR)
+        E1_*gas.thermo().mu()*sqr(oneMinusGas/solid.d())*sqr(cbrtR)
        /max(gas, gas.residualAlpha())
       + E2_*gas.rho()*magURel*(1 - gas)/solid.d()*cbrtR;
 }
