@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2023 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -55,6 +55,7 @@ Description
 
 #include "error.H"
 #include "className.H"
+#include <type_traits>
 #include <typeinfo>
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -136,6 +137,11 @@ inline bool isA(const Type& t)
     const Type* tPtr = &t;
     return dynamic_cast<const TestType*>(tPtr);
 }
+
+
+//- Determine whether a type is a reference
+template<class Type>
+constexpr bool isRef = std::is_reference<Type>::value;
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
